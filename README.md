@@ -64,7 +64,7 @@ file contain Study name, prs\_effect.
 
 We will use ./Code/create\_wPRSsum.R to construct weighted PRSsum.
 
-    source("Code/create_wPRSsum.R")
+    source("Code/create_PRSsum.R")
 
     Summary_stat1<-"Example/AFR.txt"
     Summary_stat2<-"Example/EUR.txt"
@@ -80,7 +80,7 @@ We will use ./Code/create\_wPRSsum.R to construct weighted PRSsum.
     weight_file<-"Example/2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv"
 
 
-    wprssum<- create_wprsum(Summary_stat1=Summary_stat1, Summary_stat2=Summary_stat2,
+    weighted_prssum<- create_prsum(Summary_stat1=Summary_stat1, Summary_stat2=Summary_stat2,
                             Summary_stat3=Summary_stat3, Summary_stat4=Summary_stat4, 
                             n_sample_Summary_stat1= n_sample_Summary_stat1,
                             n_sample_Summary_stat2=n_sample_Summary_stat2, 
@@ -108,7 +108,7 @@ We will use ./Code/create\_wPRSsum.R to construct weighted PRSsum.
     ## = quote, : incomplete final line found by readTableHeader on 'Example/
     ## 2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv'
 
-    head(wprssum)
+    head(weighted_prssum)
 
     ##   CHR      rsID    POS A1 A2          BETA
     ## 1   1 rs4040617 843942  A  G -9.577557e-05
@@ -120,7 +120,7 @@ We will use ./Code/create\_wPRSsum.R to construct weighted PRSsum.
 
 example for unweighted PRSsum
 
-    source("Code/create_wPRSsum.R")
+    source("Code/create_PRSsum.R")
 
     Summary_stat1<-"Example/AFR.txt"
     Summary_stat2<-"Example/EUR.txt"
@@ -135,7 +135,7 @@ example for unweighted PRSsum
     scaling_file<-"Example/2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv"
 
 
-    prssum<- create_wprsum(Summary_stat1=Summary_stat1, Summary_stat2=Summary_stat2,
+    unweighted_prssum<- create_prsum(Summary_stat1=Summary_stat1, Summary_stat2=Summary_stat2,
                             Summary_stat3=Summary_stat3, Summary_stat4=Summary_stat4, 
                             n_sample_Summary_stat1= n_sample_Summary_stat1,
                             n_sample_Summary_stat2=n_sample_Summary_stat2, 
@@ -147,7 +147,7 @@ example for unweighted PRSsum
     ## = quote, : incomplete final line found by readTableHeader on 'Example/
     ## 2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv'
 
-    head(prssum)
+    head(unweighted_prssum)
 
     ##   CHR      rsID    POS A1 A2          BETA
     ## 1   1 rs4040617 843942  A  G -0.0009594945
