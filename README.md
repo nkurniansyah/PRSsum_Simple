@@ -41,6 +41,9 @@ generate weighted and unweighted PRSsum.
 In ./Example directory, we provide 4 summary statistics from diffrent
 GWAS together with scaling and weight files.
 
+In this example: we assiggne AFR as Summary\_stat1, EUR as
+Summary\_stat2, FINNGEN as Summary\_stat3 and HIS as Summary\_stat4.
+
 for ./Example/2023-07-17\_PRS\_scaling\_AdjustedBMI\_GWAS.csv file. this
 file contain Study name, Mean and SD.
 
@@ -49,3 +52,12 @@ file contain Study name, Mean and SD.
     ## 2 Summary_stat2  6.21e-07 1.95e-07
     ## 3 Summary_stat3 -2.41e-08 4.95e-08
     ## 4 Summary_stat4 -5.62e-07 1.27e-07
+
+for ./Example/2023-07-17\_MGB\_weight\_AdjustedBMI\_GWAS.csv file. this
+file contain Study name, prs\_effect.
+
+    ##           Study prs_effect
+    ## 1 Summary_stat1 0.04180444
+    ## 2 Summary_stat2 0.72934181
+    ## 3 Summary_stat3 0.12193262
+    ## 4 Summary_stat4 0.04030905
