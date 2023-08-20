@@ -61,3 +61,47 @@ file contain Study name, prs\_effect.
     ## 2 Summary_stat2 0.72934181
     ## 3 Summary_stat3 0.12193262
     ## 4 Summary_stat4 0.04030905
+
+We will use ./Code/create\_wPRSsum.R to construct weighted PRSsum.
+
+    source("Code/create_wPRSsum.R")
+
+    Summary_stat1<-"Example/AFR.txt"
+    Summary_stat2<-"Example/EUR.txt"
+    Summary_stat3<-"Example/FINNGEN.txt"
+    Summary_stat4<-"Example/HIS.txt"
+
+    n_sample_Summary_stat1<- 873501
+    n_sample_Summary_stat2<- 938203
+    n_sample_Summary_stat3<- 930315
+    n_sample_Summary_stat4<- 924899
+
+    scaling_file<-"Example/2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv"
+    weight_file<-"Example/2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv"
+
+
+    wprssum<- create_wprsum(Summary_stat1=Summary_stat1, Summary_stat2=Summary_stat2,
+                            Summary_stat3=Summary_stat3, Summary_stat4=Summary_stat4, 
+                            n_sample_Summary_stat1= n_sample_Summary_stat1,
+                            n_sample_Summary_stat2=n_sample_Summary_stat2, 
+                            n_sample_Summary_stat3=n_sample_Summary_stat3,
+                            n_sample_Summary_stat4=n_sample_Summary_stat4,
+                            scaling_file=scaling_file, weight_file=weight_file)
+
+    ## Warning in read.table(file = file, header = header, sep = sep, quote
+    ## = quote, : incomplete final line found by readTableHeader on 'Example/
+    ## 2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv'
+
+    ## Warning in read.table(file = file, header = header, sep = sep, quote
+    ## = quote, : incomplete final line found by readTableHeader on 'Example/
+    ## 2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv'
+
+    head(wprssum)
+
+    ##   CHR      rsID    POS A1 A2          BETA
+    ## 1   1 rs4040617 843942  A  G -9.577557e-05
+    ## 2   1 rs4970383 903175  C  A -6.206930e-05
+    ## 3   1 rs4475691 911428  C  T -2.095398e-04
+    ## 4   1 rs1806509 918574  C  A  1.875377e-04
+    ## 5   1 rs7537756 918870  A  G -2.488695e-04
+    ## 6   1 rs1110052 938178  G  T -1.022256e-04
