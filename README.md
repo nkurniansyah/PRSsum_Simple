@@ -37,3 +37,23 @@ Finnaly, We provide example data set in ./Example directory and code to
 generate weighted and unweighted PRSsum.
 
 ## Example to construct weighted PRSsum
+
+In ./Example directory, we provide 4 summary statistics from diffrent
+GWAS together with scaling and weight files.
+
+for ./Example/2023-07-17\_PRS\_scaling\_AdjustedBMI\_GWAS.csv file. this
+file contain Study name, Mean and SD.
+
+    scaling<-read.csv("Example/2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv")
+
+    ## Warning in read.table(file = file, header = header, sep = sep, quote
+    ## = quote, : incomplete final line found by readTableHeader on 'Example/
+    ## 2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv'
+
+    scaling
+
+    ##           Study      Mean       SD
+    ## 1 Summary_stat1  2.66e-07 1.46e-07
+    ## 2 Summary_stat2  6.21e-07 1.95e-07
+    ## 3 Summary_stat3 -2.41e-08 4.95e-08
+    ## 4 Summary_stat4 -5.62e-07 1.27e-07
