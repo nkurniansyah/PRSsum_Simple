@@ -46,7 +46,7 @@ create_wprsum<-function(Summary_stat1, Summary_stat2=NA,Summary_stat3=NA,
   
   
   scaling<- read.csv(scaling_file)
-  weight<-read.csv(weight_file)
+
   list_summary_stat<-list_summary_stat[!is.na(list_summary_stat)]
 
   #makes sure your study name is Summary_stat1,Summary_stat2, ...
@@ -65,13 +65,22 @@ create_wprsum<-function(Summary_stat1, Summary_stat2=NA,Summary_stat3=NA,
     scaling_study<-scaling[which(scaling$Study==study),]
     mean_study<- as.numeric(scaling_study$Mean)
     sd_study<- as.numeric(scaling_study$SD)
-    
-    weight_df<-weight[which(weight$Study==study),]
-    weight_study<-as.numeric(weight_df$prs_effect)
     n_study<-list_n_samples[[paste0("n_sample_",study)]]
-    beta<- data.frame(rsID=summary_stat_df$rsID,
-                      beta_to_add=((weight_study/sd_study)*summary_stat_df$BETA)/(2*n_study),
-                      beta_to_substract=((weight_study * mean_study) /sd_study) /(2*n_study))
+    
+    if(!is.na(weight_file)){
+      weight<-read.csv(weight_file)
+      weight_df<-weight[which(weight$Study==study),]
+      weight_study<-as.numeric(weight_df$prs_effect)
+      beta<- data.frame(rsID=summary_stat_df$rsID,
+                        beta_to_add=((weight_study/sd_study)*summary_stat_df$BETA)/(2*n_study),
+                        beta_to_substract=((weight_study * mean_study) /sd_study) /(2*n_study))
+    }else{
+      beta<- data.frame(rsID=summary_stat_df$rsID,
+                        beta_to_add=((1/sd_study)*summary_stat_df$BETA)/(2*n_study),
+                        beta_to_substract=((mean_study /sd_study)/(2*n_study)))
+    }
+    
+    
     head(beta)
     
     colnames(beta)<-c("rsID",paste0(study,"_add"), paste0(study,"_sub"))
