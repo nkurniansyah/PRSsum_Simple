@@ -26,7 +26,7 @@
 #'
 #' @examples
 #' 
-create_wprsum<-function(Summary_stat1, Summary_stat2=NA,Summary_stat3=NA,
+create_prsum<-function(Summary_stat1, Summary_stat2=NA,Summary_stat3=NA,
                        Summary_stat4=NA, Summary_stat5=NA, n_sample_Summary_stat1, 
                        n_sample_Summary_stat2=NA, n_sample_Summary_stat3=NA,
                        n_sample_Summary_stat4=NA, n_sample_Summary_stat5=NA,
