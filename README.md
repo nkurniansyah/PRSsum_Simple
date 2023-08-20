@@ -35,3 +35,5 @@ $$PRSsum=g\_{i}\\left(\\frac{1}{2p\_{1}\\sigma\_{1}} \\beta\_{1i} + \\dots + \\f
 
 Finnaly, We provide example data set in ./Example directory and code to
 generate weighted and unweighted PRSsum.
+
+## Example to construct weighted PRSsum
