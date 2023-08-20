@@ -19,7 +19,7 @@ number of variants can change between PRSs, we denote by
 *p*<sub>*k*</sub> the number of variants in the *k*<sub>*t**h*</sub>
 PRS. When summing *K* PRSs with weights, the expression is:
 
-$$wPRSsum=w\_{1}\\frac{\\frac{1}{2p\_{1}}\\sum\_{i=1}^{p}g\_{i}\\beta\_{1i}-\\mu\_{1}}{\\sigma\_{1}}+ \\dots+w\_{1}\\frac{\\frac{1}{2p\_{k}}\\sum\_{i=1}^{p}g\_{k}\\beta\_{ki}-\\mu\_{k}}{\\sigma\_{k}}$$
+$$wPRSsum=w\_{1}\\frac{\\frac{1}{2p\_{1}}\\sum\_{i=1}^{p} g\_{i}\\beta\_{1i}-\\mu\_{1}}{\\sigma\_{1}}+ \\dots+w\_{1}\\frac{\\frac{1}{2p\_{k}}\\sum\_{i=1}^{p}g\_{k}\\beta\_{ki}-\\mu\_{k}}{\\sigma\_{k}}$$
 
 This can alternatively be written as a single weighted PRS formula after
 some rearrangement of terms:
@@ -96,6 +96,18 @@ We will use ./Code/create\_wPRSsum.R to construct weighted PRSsum.
     ## = quote, : incomplete final line found by readTableHeader on 'Example/
     ## 2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv'
 
+    ## Warning in read.table(file = file, header = header, sep = sep, quote
+    ## = quote, : incomplete final line found by readTableHeader on 'Example/
+    ## 2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv'
+
+    ## Warning in read.table(file = file, header = header, sep = sep, quote
+    ## = quote, : incomplete final line found by readTableHeader on 'Example/
+    ## 2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv'
+
+    ## Warning in read.table(file = file, header = header, sep = sep, quote
+    ## = quote, : incomplete final line found by readTableHeader on 'Example/
+    ## 2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv'
+
     head(wprssum)
 
     ##   CHR      rsID    POS A1 A2          BETA
@@ -105,3 +117,42 @@ We will use ./Code/create\_wPRSsum.R to construct weighted PRSsum.
     ## 4   1 rs1806509 918574  C  A  1.875377e-04
     ## 5   1 rs7537756 918870  A  G -2.488695e-04
     ## 6   1 rs1110052 938178  G  T -1.022256e-04
+
+example for unweighted PRSsum
+
+    source("Code/create_wPRSsum.R")
+
+    Summary_stat1<-"Example/AFR.txt"
+    Summary_stat2<-"Example/EUR.txt"
+    Summary_stat3<-"Example/FINNGEN.txt"
+    Summary_stat4<-"Example/HIS.txt"
+
+    n_sample_Summary_stat1<- 873501
+    n_sample_Summary_stat2<- 938203
+    n_sample_Summary_stat3<- 930315
+    n_sample_Summary_stat4<- 924899
+
+    scaling_file<-"Example/2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv"
+
+
+    prssum<- create_wprsum(Summary_stat1=Summary_stat1, Summary_stat2=Summary_stat2,
+                            Summary_stat3=Summary_stat3, Summary_stat4=Summary_stat4, 
+                            n_sample_Summary_stat1= n_sample_Summary_stat1,
+                            n_sample_Summary_stat2=n_sample_Summary_stat2, 
+                            n_sample_Summary_stat3=n_sample_Summary_stat3,
+                            n_sample_Summary_stat4=n_sample_Summary_stat4,
+                            scaling_file=scaling_file, weight_file=NA)
+
+    ## Warning in read.table(file = file, header = header, sep = sep, quote
+    ## = quote, : incomplete final line found by readTableHeader on 'Example/
+    ## 2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv'
+
+    head(prssum)
+
+    ##   CHR      rsID    POS A1 A2          BETA
+    ## 1   1 rs4040617 843942  A  G -0.0009594945
+    ## 2   1 rs4970383 903175  C  A -0.0011609164
+    ## 3   1 rs4475691 911428  C  T -0.0017549584
+    ## 4   1 rs1806509 918574  C  A  0.0023123988
+    ## 5   1 rs7537756 918870  A  G -0.0028283587
+    ## 6   1 rs1110052 938178  G  T  0.0002673745
