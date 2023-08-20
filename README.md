@@ -44,10 +44,6 @@ GWAS together with scaling and weight files.
 for ./Example/2023-07-17\_PRS\_scaling\_AdjustedBMI\_GWAS.csv file. this
 file contain Study name, Mean and SD.
 
-    ## Warning in read.table(file = file, header = header, sep = sep, quote
-    ## = quote, : incomplete final line found by readTableHeader on 'Example/
-    ## 2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv'
-
     ##           Study      Mean       SD
     ## 1 Summary_stat1  2.66e-07 1.46e-07
     ## 2 Summary_stat2  6.21e-07 1.95e-07
