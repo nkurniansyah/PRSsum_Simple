@@ -1,0 +1,132 @@
+---
+title: "PRSsum_Simple"
+author: "Nuzulul Kurniansyah & Tamar Sofer"
+date: "8/20/2023"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Introduction
+
+This repository provides information regarding the construction of a
+multi weighted and un-weighted polygenic risk score (PRSsum).
+
+Suppose that we have multiple PRSs, all using the same $p$ variants\*, and
+we sum them with weights. The formula for the $k_{th}$ PRS:
+
+$$\frac{1}{2p}\sum_{i=1}^{p} g_{i}\beta_{ki}$$
+
+Where note that is standardized according to the number of potential alleles (2 times the number of variants). 
+
+For wighted PRSsum, Suppose that we computed the mean and standard deviation of the PRSs, and they are given by $\mu_{k}$,$\sigma_{k}$ for the $K$ PRS. Noting that the number of variants can change between PRSs, we denote by $p_{k}$ the number of variants in the $k_{th}$ PRS. When summing $K$ PRSs with weights, the expression is:
+
+$$wPRSsum=w_{1}\frac{\frac{1}{2p_{1}}\sum_{i=1}^{p} g_{i}\beta_{1i}-\mu_{1}}{\sigma_{1}}+ \dots+w_{1}\frac{\frac{1}{2p_{k}}\sum_{i=1}^{p}g_{k}\beta_{ki}-\mu_{k}}{\sigma_{k}}$$
+
+This can alternatively be written as a single weighted PRS formula after some rearrangement of terms:
+$$wPRSsum=g_{i}\left(\frac{w_{1}}{2p_{1}\sigma_{1}} \beta_{1i} + \dots + \frac{w_{k}}{2p_{k}\sigma_{k}} \beta_{ki}\right)-\left( \frac{w_{1}\mu_{1}}{2p_{1}\sigma_{1}}+\dots+\frac{w_{k}\mu_{k}}{2p_{k}\sigma_{k}} \right)$$
+
+
+For Unweighted PRSsum, we will compute PRSsum without the weight ($w$)
+
+$$PRSsum=\frac{\frac{1}{2p_{1}}\sum_{i=1}^{p}g_{i}\beta_{1i}-\mu_{1}}{\sigma_{1}}+ \dots+\frac{\frac{1}{2p_{k}}\sum_{i=1}^{p}g_{k}\beta_{ki}-\mu_{k}}{\sigma_{k}}$$
+
+This can alternatively be written as a single unweighted PRS formula after some rearrangement of terms:
+$$PRSsum=g_{i}\left(\frac{1}{2p_{1}\sigma_{1}} \beta_{1i} + \dots + \frac{1}{2p_{k}\sigma_{k}} \beta_{ki}\right)-\left( \frac{\mu_{1}}{2p_{1}\sigma_{1}}+\dots+\frac{\mu_{k}}{2p_{k}\sigma_{k}} \right)$$
+
+
+Finnaly, We provide example data set in ./Example directory and code to generate weighted and unweighted PRSsum.
+
+
+## Example to construct weighted PRSsum 
+
+In ./Example directory, we provide 4 summary statistics from diffrent GWAS together with scaling and weight files.
+
+
+```{r include=FALSE}
+# load all necessery library
+library(data.table)
+library(dplyr)
+library(tidyverse)
+library(purrr)
+```
+
+In this example: we assiggne AFR as Summary_stat1, EUR as Summary_stat2, FINNGEN as Summary_stat3 and HIS as Summary_stat4.
+
+for ./Example/2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv file. this file contain Study name, Mean and SD.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+scaling<-read.csv("Example/2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv")
+scaling
+```
+
+
+for ./Example/2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv file. this file contain Study name, prs_effect.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+weight<-read.csv("Example/2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv")
+weight
+```
+
+We will use ./Code/create_wPRSsum.R to construct weighted PRSsum.
+
+```{r}
+source("Code/create_PRSsum.R")
+
+Summary_stat1<-"Example/AFR.txt"
+Summary_stat2<-"Example/EUR.txt"
+Summary_stat3<-"Example/FINNGEN.txt"
+Summary_stat4<-"Example/HIS.txt"
+
+n_sample_Summary_stat1<- 873501
+n_sample_Summary_stat2<- 938203
+n_sample_Summary_stat3<- 930315
+n_sample_Summary_stat4<- 924899
+
+scaling_file<-"Example/2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv"
+weight_file<-"Example/2023-07-17_MGB_weight_AdjustedBMI_GWAS.csv"
+
+
+weighted_prssum<- create_prsum(Summary_stat1=Summary_stat1, Summary_stat2=Summary_stat2,
+                        Summary_stat3=Summary_stat3, Summary_stat4=Summary_stat4, 
+                        n_sample_Summary_stat1= n_sample_Summary_stat1,
+                        n_sample_Summary_stat2=n_sample_Summary_stat2, 
+                        n_sample_Summary_stat3=n_sample_Summary_stat3,
+                        n_sample_Summary_stat4=n_sample_Summary_stat4,
+                        scaling_file=scaling_file, weight_file=weight_file)
+head(weighted_prssum)
+```
+
+example for unweighted PRSsum
+
+```{r}
+source("Code/create_PRSsum.R")
+
+Summary_stat1<-"Example/AFR.txt"
+Summary_stat2<-"Example/EUR.txt"
+Summary_stat3<-"Example/FINNGEN.txt"
+Summary_stat4<-"Example/HIS.txt"
+
+n_sample_Summary_stat1<- 873501
+n_sample_Summary_stat2<- 938203
+n_sample_Summary_stat3<- 930315
+n_sample_Summary_stat4<- 924899
+
+scaling_file<-"Example/2023-07-17_PRS_scaling_AdjustedBMI_GWAS.csv"
+
+
+unweighted_prssum<- create_prsum(Summary_stat1=Summary_stat1, Summary_stat2=Summary_stat2,
+                        Summary_stat3=Summary_stat3, Summary_stat4=Summary_stat4, 
+                        n_sample_Summary_stat1= n_sample_Summary_stat1,
+                        n_sample_Summary_stat2=n_sample_Summary_stat2, 
+                        n_sample_Summary_stat3=n_sample_Summary_stat3,
+                        n_sample_Summary_stat4=n_sample_Summary_stat4,
+                        scaling_file=scaling_file, weight_file=NA)
+head(unweighted_prssum)
+```
+
+
