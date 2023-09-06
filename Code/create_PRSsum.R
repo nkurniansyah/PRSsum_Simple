@@ -60,8 +60,8 @@ create_prsum<-function(variant_weights,
     
   }
   
-  head(variant_weights_clean)
-  
+
+  return(variant_weights_clean)
   
 }
 
