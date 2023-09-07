@@ -37,3 +37,108 @@ Finnaly, We provide example data set in ./Example directory and code to
 generate weighted and unweighted PRSsum.
 
 ## Example to construct weighted PRSsum
+
+We have provided an example of how to construct weighted summations of
+variant weights
+
+## 1. Prepare the variants weight files.
+
+First, we must align alleles across the study and consolidate them into
+a unified data frame. Below is an illustrative example of how to
+accomplish this task. we provided ac function a function for allele
+matching across the study, which can be found in the file
+“./Code/match\_allele.R”. NOTE: Please ensure that the column names in
+your dataset match those used in our provided example to prevent any
+errors.
+
+    source("Code/match_allele.R")
+
+    #Open all the files and modify the column names to align with the function's requirements.
+    #1. Create the list for all variants weight
+    studies<-c("AFR","EUR","HIS","FINNGEN")
+    study_list<-list()
+    for(study in studies){
+      variant_weight_file<- paste0("Example/",study,".txt")
+      
+      variant_weight<-fread(variant_weight_file, data.table = F)
+      colnames(variant_weight)<-c("Chromosome", "rsID","Position", "Allele1","Allele2", "BETA")
+
+      study_list[[study]]<- variant_weight
+    }
+
+    #example of variants weight
+    head(study_list[["AFR"]])
+
+    ##   Chromosome      rsID Position Allele1 Allele2          BETA
+    ## 1          1 rs4040617   843942       A       G -1.417655e-05
+    ## 2          1 rs4970383   903175       C       A -7.481873e-05
+    ## 3          1 rs4475691   911428       C       T -2.898467e-05
+    ## 4          1 rs1806509   918574       C       A  2.350129e-04
+    ## 5          1 rs7537756   918870       A       G -2.977790e-04
+    ## 6          1 rs1110052   938178       G       T  1.247273e-05
+
+Ensure the PRSsum scaling file in correct format
+
+    ### PRSsum Scaling
+    PRSsum_Scaling<- fread("Example/PRSsum_Scaling.csv", data.table = F)
+    PRSsum_Scaling
+
+    ##     Study      Mean       SD N_variants
+    ## 1     AFR  2.66e-07 1.46e-07     800000
+    ## 2     EUR  6.21e-07 1.95e-07     810000
+    ## 3 FINNGEN -2.41e-08 4.95e-08     820000
+    ## 4     HIS -5.62e-07 1.27e-07     850000
+
+Next, we can ensure that all the alleles match across the study by
+providing reference SNPs. In this example, we used EUR as the reference
+SNP. Below example of the reference SNP files:
+
+    ref_snp<- fread("Example/Reference_snp.txt", data.table = F)
+    head(ref_snp)
+
+    ##   Chromosome       rsID Position Allele1_ref Allele2_ref
+    ## 1          1  rs4040617   843942           A           G
+    ## 2          1  rs4970383   903175           C           A
+    ## 3          1  rs4475691   911428           C           T
+    ## 4          1  rs1806509   918574           C           A
+    ## 5          1  rs7537756   918870           A           G
+    ## 6          1 rs28576697   935265           T           C
+
+Next we can match all the variants weight with the reference SNP
+
+    variants_weight_clean<- match_allele(refrence_snp=ref_snp, 
+                                         list_variants_weight=study_list,
+                                         match_by_position=TRUE)
+
+    ## variant weight will match using chromosome and position
+
+    ##  All the allele from AFR are match with the reference SNP
+
+    ## variant weight will match using chromosome and position
+
+    ##  All the allele from EUR are match with the reference SNP
+
+    ## variant weight will match using chromosome and position
+
+    ##  All the allele from HIS are match with the reference SNP
+
+    ## variant weight will match using chromosome and position
+
+    ##  All the allele from FINNGEN are match with the reference SNP
+
+    head(variants_weight_clean)
+
+    ##   Chromosome Position Allele1 Allele2         rsID           AFR           EUR
+    ## 1          1   843942       A       G 1:843942:A:G -1.417655e-05 -2.457128e-05
+    ## 2          1   903175       C       A 1:903175:C:A -7.481873e-05  3.581781e-05
+    ## 3          1   911428       C       T 1:911428:C:T -2.898467e-05 -1.396116e-05
+    ## 4          1   918574       C       A 1:918574:C:A  2.350129e-04 -1.237048e-05
+    ## 5          1   918870       A       G 1:918870:A:G -2.977790e-04 -2.649647e-05
+    ## 6          1   938178       G       T 1:938178:G:T  1.247273e-05 -7.567884e-05
+    ##             HIS       FINNGEN
+    ## 1 -1.689371e-04 -1.082757e-05
+    ## 2  6.725460e-06 -9.154979e-05
+    ## 3 -5.658432e-05 -1.254618e-04
+    ## 4 -3.133284e-06  1.324633e-04
+    ## 5 -1.369418e-04 -9.260439e-05
+    ## 6  1.190413e-05  3.451193e-05
