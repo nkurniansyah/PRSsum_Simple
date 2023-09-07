@@ -51,6 +51,10 @@ matching across the study, which can be found in the file
 your dataset match those used in our provided example to prevent any
 errors.
 
+    library(data.table)
+    library(dplyr)
+    library(tidyverse)
+
     source("Code/match_allele.R")
 
     #Open all the files and modify the column names to align with the function's requirements.
@@ -108,33 +112,33 @@ Next we can match all the variants weight with the reference SNP
 
     variants_weight_clean<- match_allele(refrence_snp=ref_snp, 
                                          list_variants_weight=study_list,
-                                         match_by_position=TRUE)
+                                         match_by_position=FALSE)
 
-    ## variant weight will match using chromosome and position
+    ## variant weight will match using rsID, Chromosome and Position
 
     ##  All the allele from AFR are match with the reference SNP
 
-    ## variant weight will match using chromosome and position
+    ## variant weight will match using rsID, Chromosome and Position
 
     ##  All the allele from EUR are match with the reference SNP
 
-    ## variant weight will match using chromosome and position
+    ## variant weight will match using rsID, Chromosome and Position
 
     ##  All the allele from HIS are match with the reference SNP
 
-    ## variant weight will match using chromosome and position
+    ## variant weight will match using rsID, Chromosome and Position
 
     ##  All the allele from FINNGEN are match with the reference SNP
 
     head(variants_weight_clean)
 
-    ##   Chromosome Position Allele1 Allele2         rsID           AFR           EUR
-    ## 1          1   843942       A       G 1:843942:A:G -1.417655e-05 -2.457128e-05
-    ## 2          1   903175       C       A 1:903175:C:A -7.481873e-05  3.581781e-05
-    ## 3          1   911428       C       T 1:911428:C:T -2.898467e-05 -1.396116e-05
-    ## 4          1   918574       C       A 1:918574:C:A  2.350129e-04 -1.237048e-05
-    ## 5          1   918870       A       G 1:918870:A:G -2.977790e-04 -2.649647e-05
-    ## 6          1   938178       G       T 1:938178:G:T  1.247273e-05 -7.567884e-05
+    ##   Chromosome Position Allele1 Allele2      rsID           AFR           EUR
+    ## 1          1   843942       A       G rs4040617 -1.417655e-05 -2.457128e-05
+    ## 2          1   903175       C       A rs4970383 -7.481873e-05  3.581781e-05
+    ## 3          1   911428       C       T rs4475691 -2.898467e-05 -1.396116e-05
+    ## 4          1   918574       C       A rs1806509  2.350129e-04 -1.237048e-05
+    ## 5          1   918870       A       G rs7537756 -2.977790e-04 -2.649647e-05
+    ## 6          1   938178       G       T rs1110052  1.247273e-05 -7.567884e-05
     ##             HIS       FINNGEN
     ## 1 -1.689371e-04 -1.082757e-05
     ## 2  6.725460e-06 -9.154979e-05
