@@ -32,8 +32,10 @@ match_allele<- function(refrence_snp,
       ind_flip_beta<- which(variant_weight_annot$Allele1_ref!=variant_weight_annot$Allele1)
       
       if(length(ind_flip_beta)> 0){
-        message(paste0("fliping allele with total ", length(ind_flip_beta)))
+        message(paste0(length(ind_flip_beta)," alleles from ",study," are being flipped to align them with the reference SNP"))
         variant_weight_annot$BETA[ind_flip_beta]<- variant_weight_annot$BETA[ind_flip_beta]*-1
+      }else{
+        message(paste0(" All the allele from ",study," are match with the reference SNP "))
       }
       
       ind_allele_na<-which(is.na(variant_weight_annot$Allele1_ref))
@@ -42,34 +44,39 @@ match_allele<- function(refrence_snp,
         variant_weight_annot$Allele2_ref<-variant_weight_annot$Allele2
       }
       
-      variant_weight_annot<-variant_weight_annot %>% dplyr::select(Chromosome, Position, Allele1_ref, Allele2_ref )
+      variant_weight_annot<-variant_weight_annot %>% dplyr::select(Chromosome, Position, Allele1_ref, Allele2_ref,BETA )
       head(variant_weight_annot)
       
-      variant_weight_df<- variant_weight_annot %>% mutate(variant_id= paste0(Chromosome,":",Position,":",Allele1_ref,":",Allele2_ref))
+      variant_weight_df<- variant_weight_annot %>% mutate(variant_id= paste0(Chromosome,":",Position,":",Allele1_ref,":",Allele2_ref),
+                                                          rsID=variant_id) 
       head(variant_weight_df)
-      variant_weight_df<-variant_weight_df %>% dplyr::select(variant_id, BETA)
-      colnames(variant_weight_df)<-c("variant_id",study )
+      variant_weight_df<-variant_weight_df %>% dplyr::select(variant_id, rsID,BETA)
+      colnames(variant_weight_df)<-c("variant_id","rsID",study )
       
     }else{
-      message("variant weight will match using rsID")
+      message("variant weight will match using rsID, Chromosome and Position")
       
-      variant_weight_annot<-left_join(selected_variant_weight,refrence_snp,by=c("rsID"))
+      variant_weight_annot<-left_join(selected_variant_weight,refrence_snp,by=c("rsID","Chromosome","Position"))
       ind_flip_beta<- which(variant_weight_annot$Allele1_ref!=variant_weight_annot$Allele1)
       
       if(length(ind_flip_beta)> 0){
-        message(paste0("fliping allele with total ", length(ind_flip_beta)))
+        message(paste0(length(ind_flip_beta)," alleles from ",study," are being flipped to align them with the reference SNP"))
         variant_weight_annot$BETA[ind_flip_beta]<- variant_weight_annot$BETA[ind_flip_beta]*-1
+      }else{
+        message(paste0(" All the allele from ",study," are match with the reference SNP "))
       }
+      
+      
       
       ind_allele_na<-which(is.na(variant_weight_annot$Allele1_ref))
       if(length(ind_allele_na)> 0){
         variant_weight_annot$Allele1_ref<-variant_weight_annot$Allele1
         variant_weight_annot$Allele2_ref<-variant_weight_annot$Allele2
       }
-      variant_weight_annot<-variant_weight_annot %>% dplyr::select(rsID,Chromosome_ref, Position_ref, Allele1_ref, Allele2_ref,BETA )
+      variant_weight_annot<-variant_weight_annot %>% dplyr::select(rsID,Chromosome, Position, Allele1_ref, Allele2_ref,BETA )
       head(variant_weight_annot)
       
-      variant_weight_df<- variant_weight_annot %>% mutate(variant_id= paste0(Chromosome_ref,":",Position_ref,":",Allele1_ref,":",Allele2_ref))
+      variant_weight_df<- variant_weight_annot %>% mutate(variant_id= paste0(Chromosome,":",Position,":",Allele1_ref,":",Allele2_ref))
       head(variant_weight_df)
       variant_weight_df<-variant_weight_df %>% dplyr::select(variant_id,rsID, BETA)
       colnames(variant_weight_df)<-c("variant_id","rsID",study )
@@ -78,7 +85,8 @@ match_allele<- function(refrence_snp,
     out[[study]]<- variant_weight_df
   }
   
-  all_variant_weight<- purrr::reduce(out, full_join, by="variant_id")
+
+  all_variant_weight<- purrr::reduce(out, full_join, by=c("variant_id","rsID" ))
   head(all_variant_weight)
   
   all_variant_weight<- all_variant_weight %>%separate(variant_id, c("Chromosome","Position","Allele1","Allele2"),":")
