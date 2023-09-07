@@ -50,7 +50,7 @@ We have provided an example of how to construct weighted summations of variant w
 
 First, we must align alleles across the study and consolidate them into a unified data frame. Below is an illustrative example of how to accomplish this task. we provided ac function a function for allele matching across the study, which can be found in the file "./Code/match_allele.R". NOTE: Please ensure that the column names in your dataset match those used in our provided example to prevent any errors.
 
-```{r include=FALSE}
+```{r,warning=FALSE,message=FALSE}
 library(data.table)
 library(dplyr)
 library(tidyverse)
@@ -97,7 +97,7 @@ Next we can match all the variants weight with the reference SNP
 ```{r}
 variants_weight_clean<- match_allele(refrence_snp=ref_snp, 
                                      list_variants_weight=study_list,
-                                     match_by_position=TRUE)
+                                     match_by_position=FALSE)
 
 head(variants_weight_clean)
 ```
