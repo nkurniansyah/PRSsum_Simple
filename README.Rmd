@@ -103,4 +103,47 @@ head(variants_weight_clean)
 ```
 
 
+## 2. Create summation variant weight
+
+If you intend to run weighted variant weights (weighted PRSsum), you need to  provide the file paths for the weight file. Follow the example below to format the column name in the weight file.
+
+```{r}
+weight<- fread("Example/Weight.csv", data.table = F)
+weight
+```
+
+
+Weighted variant weights (weighted PRSsum) can be generated using the following command:
+
+```{r}
+source("Code/create_PRSsum.R")
+weigted_variants_weight<- create_prsum(variant_weights=variants_weight_clean, 
+                                       PRSsum_scaling=PRSsum_Scaling, 
+                                       weight_file="Example/Weight.csv",
+                                       chr_col_name="Chromosome", 
+                                       pos_col_name="Position", 
+                                       effect_allele_col_name="Allele1",
+                                       other_allele_col_name="Allele2",
+                                       rsID_col_name="rsID")
+head(weigted_variants_weight)
+```
+
+
+If you intded to run un-weighted variant weights ( unweighted PRSsum) can be generated using the following command:
+
+```{r}
+source("Code/create_PRSsum.R")
+unweigted_variants_weight<- create_prsum(variant_weights=variants_weight_clean, 
+                                       PRSsum_scaling=PRSsum_Scaling, 
+                                       weight_file=NULL,
+                                       chr_col_name="Chromosome", 
+                                       pos_col_name="Position", 
+                                       effect_allele_col_name="Allele1",
+                                       other_allele_col_name="Allele2",
+                                       rsID_col_name="rsID")
+head(unweigted_variants_weight)
+```
+
+
+
 
