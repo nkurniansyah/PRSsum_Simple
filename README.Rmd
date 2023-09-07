@@ -43,3 +43,64 @@ Finnaly, We provide example data set in ./Example directory and code to generate
 
 
 ## Example to construct weighted PRSsum 
+
+We have provided an example of how to construct weighted summations of variant weights
+
+## 1. Prepare the variants weight files.
+
+First, we must align alleles across the study and consolidate them into a unified data frame. Below is an illustrative example of how to accomplish this task. we provided ac function a function for allele matching across the study, which can be found in the file "./Code/match_allele.R". NOTE: Please ensure that the column names in your dataset match those used in our provided example to prevent any errors.
+
+```{r include=FALSE}
+library(data.table)
+library(dplyr)
+library(tidyverse)
+```
+
+
+```{r}
+source("Code/match_allele.R")
+
+#Open all the files and modify the column names to align with the function's requirements.
+#1. Create the list for all variants weight
+studies<-c("AFR","EUR","HIS","FINNGEN")
+study_list<-list()
+for(study in studies){
+  variant_weight_file<- paste0("Example/",study,".txt")
+  
+  variant_weight<-fread(variant_weight_file, data.table = F)
+  colnames(variant_weight)<-c("Chromosome", "rsID","Position", "Allele1","Allele2", "BETA")
+
+  study_list[[study]]<- variant_weight
+}
+
+#example of variants weight
+head(study_list[["AFR"]])
+```
+
+Ensure the PRSsum scaling file in correct format
+
+```{r}
+### PRSsum Scaling
+PRSsum_Scaling<- fread("Example/PRSsum_Scaling.csv", data.table = F)
+PRSsum_Scaling
+```
+
+Next, we can ensure that all the alleles match across the study by providing reference SNPs. In this example, we used EUR as the reference SNP. Below example of the reference SNP files:
+
+```{r}
+ref_snp<- fread("Example/Reference_snp.txt", data.table = F)
+head(ref_snp)
+```
+
+Next we can match all the variants weight with the reference SNP
+
+```{r}
+variants_weight_clean<- match_allele(refrence_snp=ref_snp, 
+                                     list_variants_weight=study_list,
+                                     match_by_position=TRUE)
+
+head(variants_weight_clean)
+```
+
+
+
