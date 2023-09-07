@@ -146,3 +146,68 @@ Next we can match all the variants weight with the reference SNP
     ## 4 -3.133284e-06  1.324633e-04
     ## 5 -1.369418e-04 -9.260439e-05
     ## 6  1.190413e-05  3.451193e-05
+
+## 2. Create summation variant weight
+
+If you intend to run weighted variant weights (weighted PRSsum), you
+need to provide the file paths for the weight file. Follow the example
+below to format the column name in the weight file.
+
+    weight<- fread("Example/Weight.csv", data.table = F)
+    weight
+
+    ##     Study prs_effect
+    ## 1     AFR 0.04180444
+    ## 2     EUR 0.72934181
+    ## 3 FINNGEN 0.12193262
+    ## 4     HIS 0.04030905
+
+Weighted variant weights (weighted PRSsum) can be generated using the
+following command:
+
+    source("Code/create_PRSsum.R")
+    weigted_variants_weight<- create_prsum(variant_weights=variants_weight_clean, 
+                                           PRSsum_scaling=PRSsum_Scaling, 
+                                           weight_file="Example/Weight.csv",
+                                           chr_col_name="Chromosome", 
+                                           pos_col_name="Position", 
+                                           effect_allele_col_name="Allele1",
+                                           other_allele_col_name="Allele2",
+                                           rsID_col_name="rsID")
+
+    ## Runweighted PRSsum
+
+    head(weigted_variants_weight)
+
+    ##        rsID chr_name chr_position effect_allele other_allele effect_weight
+    ## 1 rs4040617        1       843942             A            G -1.070705e-04
+    ## 2 rs4970383        1       903175             C            A -6.694654e-05
+    ## 3 rs4475691        1       911428             C            T -2.364286e-04
+    ## 4 rs1806509        1       918574             C            A  2.118719e-04
+    ## 5 rs7537756        1       918870             A            G -2.791236e-04
+    ## 6 rs1110052        1       938178             G            T -1.184337e-04
+
+If you intded to run un-weighted variant weights ( unweighted PRSsum)
+can be generated using the following command:
+
+    source("Code/create_PRSsum.R")
+    unweigted_variants_weight<- create_prsum(variant_weights=variants_weight_clean, 
+                                           PRSsum_scaling=PRSsum_Scaling, 
+                                           weight_file=NULL,
+                                           chr_col_name="Chromosome", 
+                                           pos_col_name="Position", 
+                                           effect_allele_col_name="Allele1",
+                                           other_allele_col_name="Allele2",
+                                           rsID_col_name="rsID")
+
+    ## Run unweighted PRSsum
+
+    head(unweigted_variants_weight)
+
+    ##        rsID chr_name chr_position effect_allele other_allele effect_weight
+    ## 1 rs4040617        1       843942             A            G -0.0010543249
+    ## 2 rs4970383        1       903175             C            A -0.0013034897
+    ## 3 rs4475691        1       911428             C            T -0.0019758356
+    ## 4 rs1806509        1       918574             C            A  0.0025840996
+    ## 5 rs7537756        1       918870             A            G -0.0031336276
+    ## 6 rs1110052        1       938178             G            T  0.0002940934
