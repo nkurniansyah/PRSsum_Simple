@@ -23,32 +23,32 @@ $$\frac{1}{2p}\sum_{i=1}^{p} g_{i}\beta_{ki}$$
 
 Where note that is standardized according to the number of potential alleles (2 times the number of variants). 
 
-For wighted PRSsum, Suppose that we computed the mean and standard deviation of the PRSs, and they are given by $\mu_{k}$,$\sigma_{k}$ for the $K$ PRS. Noting that the number of variants can change between PRSs, we denote by $p_{k}$ the number of variants in the $k_{th}$ PRS. When summing $K$ PRSs with weights, the expression is:
+For weighted PRSsum, Suppose that we computed the mean and standard deviation of the PRSs, and they are given by $\mu_{k}$,$\sigma_{k}$ for the $k$ PRS. Noting that the number of variants can change between PRSs, we denote by $p_{k}$ the number of variants in the $k_{th}$ PRS. When summing $K$ PRSs with weights, the expression is:
 
-$$wPRSsum=w_{1}\frac{\frac{1}{2p_{1}}\sum_{i=1}^{p} g_{i}\beta_{1i}-\mu_{1}}{\sigma_{1}}+ \dots+w_{1}\frac{\frac{1}{2p_{k}}\sum_{i=1}^{p}g_{k}\beta_{ki}-\mu_{k}}{\sigma_{k}}$$
+$$wPRSsum=w_{1}\frac{\frac{1}{2p_{1}}\sum_{i=1}^{p_1} g_{i}\beta_{1i}-\mu_{1}}{\sigma_{1}}+ \dots+w_{1}\frac{\frac{1}{2p_{k}}\sum_{i=1}^{p_k}g_{k}\beta_{ki}-\mu_{k}}{\sigma_{k}}$$
 
-This can alternatively be written as a single weighted PRS formula after some rearrangement of terms:
-$$wPRSsum=g_{i}\left(\frac{w_{1}}{2p_{1}\sigma_{1}} \beta_{1i} + \dots + \frac{w_{k}}{2p_{k}\sigma_{k}} \beta_{ki}\right)-\left( \frac{w_{1}\mu_{1}}{2p_{1}\sigma_{1}}+\dots+\frac{w_{k}\mu_{k}}{2p_{k}\sigma_{k}} \right)$$
+Denote by $p$ the total number of variants used in at least one of the component PRSs, where the corresponding variant weight $\beta$ may equal zero in a component PRS that does not include this variant. The above expression can alternatively be written as a single weighted PRS formula after some rearrangement of terms:
+$$wPRSsum=\sum_{i=1}^p g_{i}\left(\frac{w_{1}}{2p_{1}\sigma_{1}} \beta_{1i} + \dots + \frac{w_{k}}{2p_{k}\sigma_{k}} \beta_{ki}\right)-\left( \frac{w_{1}\mu_{1}}{2p_{1}\sigma_{1}}+\dots+\frac{w_{k}\mu_{k}}{2p_{k}\sigma_{k}} \right)$$
 
 
 For Unweighted PRSsum, we will compute PRSsum without the weight ($w$)
 
-$$PRSsum=\frac{\frac{1}{2p_{1}}\sum_{i=1}^{p}g_{i}\beta_{1i}-\mu_{1}}{\sigma_{1}}+ \dots+\frac{\frac{1}{2p_{k}}\sum_{i=1}^{p}g_{k}\beta_{ki}-\mu_{k}}{\sigma_{k}}$$
+$$PRSsum=\frac{\frac{1}{2p_{1}}\sum_{i=1}^{p_1}g_{i}\beta_{1i}-\mu_{1}}{\sigma_{1}}+ \dots+\frac{\frac{1}{2p_{k}}\sum_{i=1}^{p_k}g_{k}\beta_{ki}-\mu_{k}}{\sigma_{k}}$$
 
-This can alternatively be written as a single unweighted PRS formula after some rearrangement of terms:
-$$PRSsum=g_{i}\left(\frac{1}{2p_{1}\sigma_{1}} \beta_{1i} + \dots + \frac{1}{2p_{k}\sigma_{k}} \beta_{ki}\right)-\left( \frac{\mu_{1}}{2p_{1}\sigma_{1}}+\dots+\frac{\mu_{k}}{2p_{k}\sigma_{k}} \right)$$
+As before, this can alternatively be written as a single unweighted PRS formula after some rearrangement of terms:
+$$PRSsum=\sum_{i=1}^pg_{i}\left(\frac{1}{2p_{1}\sigma_{1}} \beta_{1i} + \dots + \frac{1}{2p_{k}\sigma_{k}} \beta_{ki}\right)-\left( \frac{\mu_{1}}{2p_{1}\sigma_{1}}+\dots+\frac{\mu_{k}}{2p_{k}\sigma_{k}} \right)$$
 
 
-Finnaly, We provide example data set in ./Example directory and code to generate weighted and unweighted PRSsum.
+We provide an example data set in ./Example directory and code to generate weighted and unweighted PRSsum.
 
 
 ## Example to construct weighted PRSsum 
 
-We have provided an example of how to construct weighted summations of variant weights
+Here is an example of how to construct weighted summations of variant weights from a few PRS weight files.
 
 ## 1. Prepare the variants weight files.
 
-First, we must align alleles across the study and consolidate them into a unified data frame. Below is an illustrative example of how to accomplish this task. we provided ac function a function for allele matching across the study, which can be found in the file "./Code/match_allele.R". NOTE: Please ensure that the column names in your dataset match those used in our provided example to prevent any errors.
+First, we must align alleles across the study and consolidate them into a unified data frame. Below is an illustrative example of how to accomplish this task. We provided a function for allele matching across the study, which can be found in the file "./Code/match_allele.R". NOTE: Please ensure that the column names in your dataset match those used in our provided example to prevent any errors.
 
 ```{r,warning=FALSE,message=FALSE}
 library(data.table)
@@ -77,7 +77,7 @@ for(study in studies){
 head(study_list[["AFR"]])
 ```
 
-Ensure the PRSsum scaling file in correct format
+Ensure the PRSsum scaling file is in the correct format
 
 ```{r}
 ### PRSsum Scaling
@@ -129,7 +129,7 @@ head(weigted_variants_weight)
 ```
 
 
-If you intded to run un-weighted variant weights ( unweighted PRSsum) can be generated using the following command:
+If you intend to construct an un-weighted PRS summation (unweighted PRSsum), it can be generated using the following command:
 
 ```{r}
 source("Code/create_PRSsum.R")
