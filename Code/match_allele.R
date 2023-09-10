@@ -40,6 +40,7 @@ match_allele<- function(refrence_snp,
       
       ind_allele_na<-which(is.na(variant_weight_annot$Allele1_ref))
       if(length(ind_allele_na)> 0){
+        message(paste0("There are ",length(ind_allele_na)," SNP's in ",study," are not found in the reference SNPs, These SNPs will be assigned as new reference SNPs"))
         variant_weight_annot$Allele1_ref<-variant_weight_annot$Allele1
         variant_weight_annot$Allele2_ref<-variant_weight_annot$Allele2
       }
@@ -56,7 +57,6 @@ match_allele<- function(refrence_snp,
     }else{
       message("variant weight will match using rsID, Chromosome and Position")
       
-      variant_weight_annot<-left_join(selected_variant_weight,refrence_snp,by=c("rsID","Chromosome","Position"))
       ind_flip_beta<- which(variant_weight_annot$Allele1_ref!=variant_weight_annot$Allele1)
       
       if(length(ind_flip_beta)> 0){
@@ -70,6 +70,7 @@ match_allele<- function(refrence_snp,
       
       ind_allele_na<-which(is.na(variant_weight_annot$Allele1_ref))
       if(length(ind_allele_na)> 0){
+        message(paste0("There are ",length(ind_allele_na)," SNP's in ",study," are not found in the reference SNPs, These SNPs will be assigned as new reference SNPs"))
         variant_weight_annot$Allele1_ref<-variant_weight_annot$Allele1
         variant_weight_annot$Allele2_ref<-variant_weight_annot$Allele2
       }
