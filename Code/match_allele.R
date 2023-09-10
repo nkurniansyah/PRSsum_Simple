@@ -1,5 +1,5 @@
 
-#' Title : Matching allele accross study
+#' Title : Matching allele across studies
 #'
 #' @param refrence_snp : A data frame for SNP reference data, which can be derived from a full summary statistics dataset. This file should include the following columns: 
 #'                       Chromosome, Position, Allele1_ref, and Allele2_ref. Ensure that the naming conventions are consistently followed.
@@ -26,7 +26,7 @@ match_allele<- function(refrence_snp,
     selected_variant_weight<-list_variants_weight[[study]] 
 
     if(match_by_position){
-      message("variant weight will match using chromosome and position")
+      message("variant weight will be matched using chromosome and position")
       
       variant_weight_annot<-left_join(selected_variant_weight,refrence_snp,by=c("Chromosome","Position"))
       ind_flip_beta<- which(variant_weight_annot$Allele1_ref!=variant_weight_annot$Allele1)
@@ -35,7 +35,7 @@ match_allele<- function(refrence_snp,
         message(paste0(length(ind_flip_beta)," alleles from ",study," are being flipped to align them with the reference SNP"))
         variant_weight_annot$BETA[ind_flip_beta]<- variant_weight_annot$BETA[ind_flip_beta]*-1
       }else{
-        message(paste0(" All the allele from ",study," are match with the reference SNP "))
+        message(paste0(" All the allele from ",study," are matched with the reference SNP "))
       }
       
       ind_allele_na<-which(is.na(variant_weight_annot$Allele1_ref))
@@ -55,7 +55,7 @@ match_allele<- function(refrence_snp,
       colnames(variant_weight_df)<-c("variant_id","rsID",study )
       
     }else{
-      message("variant weight will match using rsID, Chromosome and Position")
+      message("variant weight will be matched using rsID, Chromosome and Position")
       
       ind_flip_beta<- which(variant_weight_annot$Allele1_ref!=variant_weight_annot$Allele1)
       
@@ -63,7 +63,7 @@ match_allele<- function(refrence_snp,
         message(paste0(length(ind_flip_beta)," alleles from ",study," are being flipped to align them with the reference SNP"))
         variant_weight_annot$BETA[ind_flip_beta]<- variant_weight_annot$BETA[ind_flip_beta]*-1
       }else{
-        message(paste0(" All the allele from ",study," are match with the reference SNP "))
+        message(paste0(" All the allele from ",study," are matched with the reference SNP "))
       }
       
       
