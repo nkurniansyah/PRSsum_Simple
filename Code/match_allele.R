@@ -56,8 +56,9 @@ match_allele<- function(refrence_snp,
       
     }else{
       message("variant weight will be matched using rsID, Chromosome and Position")
-      
+      variant_weight_annot<-left_join(selected_variant_weight,refrence_snp,by=c("rsID","Chromosome","Position"))
       ind_flip_beta<- which(variant_weight_annot$Allele1_ref!=variant_weight_annot$Allele1)
+      
       
       if(length(ind_flip_beta)> 0){
         message(paste0(length(ind_flip_beta)," alleles from ",study," are being flipped to align them with the reference SNP"))
