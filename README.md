@@ -12,44 +12,46 @@ $$\frac{1}{2p}\sum\_{i=1}^{p} g\_{i}\beta\_{ki}$$
 Where note that is standardized according to the number of potential
 alleles (2 times the number of variants).
 
-For wighted PRSsum, Suppose that we computed the mean and standard
+For weighted PRSsum, Suppose that we computed the mean and standard
 deviation of the PRSs, and they are given by
-*μ*<sub>*k*</sub>,*σ*<sub>*k*</sub> for the *K* PRS. Noting that the
+*μ*<sub>*k*</sub>,*σ*<sub>*k*</sub> for the *k* PRS. Noting that the
 number of variants can change between PRSs, we denote by
 *p*<sub>*k*</sub> the number of variants in the *k*<sub>*t**h*</sub>
 PRS. When summing *K* PRSs with weights, the expression is:
 
-$$wPRSsum=w\_{1}\frac{\frac{1}{2p\_{1}}\sum\_{i=1}^{p} g\_{i}\beta\_{1i}-\mu\_{1}}{\sigma\_{1}}+ \dots+w\_{1}\frac{\frac{1}{2p\_{k}}\sum\_{i=1}^{p}g\_{k}\beta\_{ki}-\mu\_{k}}{\sigma\_{k}}$$
+$$wPRSsum=w\_{1}\frac{\frac{1}{2p\_{1}}\sum\_{i=1}^{p\_1} g\_{i}\beta\_{1i}-\mu\_{1}}{\sigma\_{1}}+ \dots+w\_{1}\frac{\frac{1}{2p\_{k}}\sum\_{i=1}^{p\_k}g\_{k}\beta\_{ki}-\mu\_{k}}{\sigma\_{k}}$$
 
-This can alternatively be written as a single weighted PRS formula after
-some rearrangement of terms:
-$$wPRSsum=g\_{i}\left(\frac{w\_{1}}{2p\_{1}\sigma\_{1}} \beta\_{1i} + \dots + \frac{w\_{k}}{2p\_{k}\sigma\_{k}} \beta\_{ki}\right)-\left( \frac{w\_{1}\mu\_{1}}{2p\_{1}\sigma\_{1}}+\dots+\frac{w\_{k}\mu\_{k}}{2p\_{k}\sigma\_{k}} \right)$$
+Denote by *p* the total number of variants used in at least one of the
+component PRSs, where the corresponding variant weight *β* may equal
+zero in a component PRS that does not include this variant. The above
+expression can alternatively be written as a single weighted PRS formula
+after some rearrangement of terms:
+$$wPRSsum=\sum\_{i=1}^p g\_{i}\left(\frac{w\_{1}}{2p\_{1}\sigma\_{1}} \beta\_{1i} + \dots + \frac{w\_{k}}{2p\_{k}\sigma\_{k}} \beta\_{ki}\right)-\left( \frac{w\_{1}\mu\_{1}}{2p\_{1}\sigma\_{1}}+\dots+\frac{w\_{k}\mu\_{k}}{2p\_{k}\sigma\_{k}} \right)$$
 
 For Unweighted PRSsum, we will compute PRSsum without the weight (*w*)
 
-$$PRSsum=\frac{\frac{1}{2p\_{1}}\sum\_{i=1}^{p}g\_{i}\beta\_{1i}-\mu\_{1}}{\sigma\_{1}}+ \dots+\frac{\frac{1}{2p\_{k}}\sum\_{i=1}^{p}g\_{k}\beta\_{ki}-\mu\_{k}}{\sigma\_{k}}$$
+$$PRSsum=\frac{\frac{1}{2p\_{1}}\sum\_{i=1}^{p\_1}g\_{i}\beta\_{1i}-\mu\_{1}}{\sigma\_{1}}+ \dots+\frac{\frac{1}{2p\_{k}}\sum\_{i=1}^{p\_k}g\_{k}\beta\_{ki}-\mu\_{k}}{\sigma\_{k}}$$
 
-This can alternatively be written as a single unweighted PRS formula
-after some rearrangement of terms:
-$$PRSsum=g\_{i}\left(\frac{1}{2p\_{1}\sigma\_{1}} \beta\_{1i} + \dots + \frac{1}{2p\_{k}\sigma\_{k}} \beta\_{ki}\right)-\left( \frac{\mu\_{1}}{2p\_{1}\sigma\_{1}}+\dots+\frac{\mu\_{k}}{2p\_{k}\sigma\_{k}} \right)$$
+As before, this can alternatively be written as a single unweighted PRS
+formula after some rearrangement of terms:
+$$PRSsum=\sum\_{i=1}^pg\_{i}\left(\frac{1}{2p\_{1}\sigma\_{1}} \beta\_{1i} + \dots + \frac{1}{2p\_{k}\sigma\_{k}} \beta\_{ki}\right)-\left( \frac{\mu\_{1}}{2p\_{1}\sigma\_{1}}+\dots+\frac{\mu\_{k}}{2p\_{k}\sigma\_{k}} \right)$$
 
-Finnaly, We provide example data set in ./Example directory and code to
+We provide an example data set in ./Example directory and code to
 generate weighted and unweighted PRSsum.
 
 ## Example to construct weighted PRSsum
 
-We have provided an example of how to construct weighted summations of
-variant weights
+Here is an example of how to construct weighted summations of variant
+weights from a few PRS weight files.
 
 ## 1. Prepare the variants weight files.
 
 First, we must align alleles across the study and consolidate them into
 a unified data frame. Below is an illustrative example of how to
-accomplish this task. we provided ac function a function for allele
-matching across the study, which can be found in the file
-“./Code/match\_allele.R”. NOTE: Please ensure that the column names in
-your dataset match those used in our provided example to prevent any
-errors.
+accomplish this task. We provided a function for allele matching across
+the study, which can be found in the file “./Code/match\_allele.R”.
+NOTE: Please ensure that the column names in your dataset match those
+used in our provided example to prevent any errors.
 
     library(data.table)
     library(dplyr)
@@ -81,7 +83,7 @@ errors.
     ## 5          1 rs7537756   918870       A       G -2.977790e-04
     ## 6          1 rs1110052   938178       G       T  1.247273e-05
 
-Ensure the PRSsum scaling file in correct format
+Ensure the PRSsum scaling file is in the correct format
 
     ### PRSsum Scaling
     PRSsum_Scaling<- fread("Example/PRSsum_Scaling.csv", data.table = F)
@@ -114,21 +116,27 @@ Next we can match all the variants weight with the reference SNP
                                          list_variants_weight=study_list,
                                          match_by_position=FALSE)
 
-    ## variant weight will match using rsID, Chromosome and Position
+    ## variant weight will be matched using rsID, Chromosome and Position
 
-    ##  All the allele from AFR are match with the reference SNP
+    ##  All the allele from AFR are matched with the reference SNP
 
-    ## variant weight will match using rsID, Chromosome and Position
+    ## There are 12 SNP's in AFR are not found in the reference SNPs, These SNPs will be assigned as new reference SNPs
 
-    ##  All the allele from EUR are match with the reference SNP
+    ## variant weight will be matched using rsID, Chromosome and Position
 
-    ## variant weight will match using rsID, Chromosome and Position
+    ##  All the allele from EUR are matched with the reference SNP
 
-    ##  All the allele from HIS are match with the reference SNP
+    ## variant weight will be matched using rsID, Chromosome and Position
 
-    ## variant weight will match using rsID, Chromosome and Position
+    ##  All the allele from HIS are matched with the reference SNP
 
-    ##  All the allele from FINNGEN are match with the reference SNP
+    ## There are 6 SNP's in HIS are not found in the reference SNPs, These SNPs will be assigned as new reference SNPs
+
+    ## variant weight will be matched using rsID, Chromosome and Position
+
+    ##  All the allele from FINNGEN are matched with the reference SNP
+
+    ## There are 2 SNP's in FINNGEN are not found in the reference SNPs, These SNPs will be assigned as new reference SNPs
 
     head(variants_weight_clean)
 
@@ -175,7 +183,7 @@ following command:
                                            other_allele_col_name="Allele2",
                                            rsID_col_name="rsID")
 
-    ## Runweighted PRSsum
+    ## Run weighted PRSsum
 
     head(weigted_variants_weight)
 
@@ -187,8 +195,8 @@ following command:
     ## 5 rs7537756        1       918870             A            G -2.791236e-04
     ## 6 rs1110052        1       938178             G            T -1.184337e-04
 
-If you intded to run un-weighted variant weights ( unweighted PRSsum)
-can be generated using the following command:
+If you intend to construct an un-weighted PRS summation (unweighted
+PRSsum), it can be generated using the following command:
 
     source("Code/create_PRSsum.R")
     unweigted_variants_weight<- create_prsum(variant_weights=variants_weight_clean, 
