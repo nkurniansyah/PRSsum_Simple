@@ -31,7 +31,7 @@ create_prsum<-function(variant_weights,
   variant_weights[is.na(variant_weights)] <- 0
   
   if(!is.null(weight_file)){
-    message("Runweighted PRSsum")
+    message("Run weighted PRSsum")
     
     weight<- fread(weight_file, data.table=F)
     PRSsum_scaling<-left_join(PRSsum_scaling, weight, by="Study")
